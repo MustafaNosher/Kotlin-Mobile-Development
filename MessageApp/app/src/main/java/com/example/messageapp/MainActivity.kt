@@ -15,9 +15,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private val messageList = mutableListOf(
-        ChatContent("'Welcome User Here you will write your input'")
-    )
+    private var messageList = mutableListOf<ChatContent>()
+
     private lateinit var rv:RecyclerView //recycler view type object
     private lateinit var customadapter:MyAdapter //adapter type object
     private lateinit var textInput: EditText // Edit Text type object
@@ -41,13 +40,14 @@ class MainActivity : AppCompatActivity() {
     private fun sendChat(){
         textInput=findViewById(R.id.messagebox) //id of view where the user will writes its message
         val messageText = textInput.text.toString().trim()
+        val default_message="Hello There How May I assist You!"
         if (messageText.isNotEmpty()){
 
             customadapter= MyAdapter(messageList)
             rv.adapter=customadapter
             rv.addItemDecoration( DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
-            val data=ChatContent(messageText)
-            messageList+=data
+            val data=ChatContent(messageText,default_message)
+            messageList+=data // this part save the CONVERSATION in the global List
             customadapter.notifyDataSetChanged()
             // Scroll the RecyclerView to the end so that the new message is visible
             rv.scrollToPosition(messageList.size - 1)

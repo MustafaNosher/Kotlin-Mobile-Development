@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
 
-class MyAdapter(private val messages:List <ChatContent>): RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter( private var messages: MutableList<ChatContent> = mutableListOf<ChatContent>()): RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
 
 
@@ -31,13 +31,14 @@ class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val default_message="Hello! There How may I assist you Today"
 
-      val data=messages[position]
+
+        val data=messages[position]
+
         holder.message1.text=data.message //.message(that is the object of the ChatContent)
 
-        val data2=default_message
-        holder.message2.text=data2 //.message(that is the object of the ChatContent)
+        val data2=messages[position].reply
+        holder.message2.text=data2//.message(that is the object of the ChatContent)
 
         //Using Built in Method to print time accroding to cuurent system time
         val currentTime = System.currentTimeMillis()

@@ -1,5 +1,4 @@
 package com.example.messageapp
 
-data class ChatContent(
-    val message:String
-    )
+data class ChatContent(var message: String,var reply: String)
+
