@@ -17,14 +17,19 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var adapter:ConversationAdapter //adapter type object
     private lateinit var textInput: EditText // Edit Text type object
     private lateinit var addButton: Button // Button Type Object
+    private lateinit var CDAO:  ConversationDAO//MESSAGE domain layer object
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        val dbHelper =  DataBaseHandler(this)
-        val conversation_list=dbHelper.readConversation()
+        CDAO=ConversationDbDAO(this)
+
+
+//        val dbHelper =  DataBaseHandler(this)
+        val conversation_list=CDAO.readConversation()
 
         rv=findViewById(R.id.ContactsRecyclerView)
         rv.layoutManager= LinearLayoutManager(this)
@@ -33,9 +38,10 @@ class MainActivity2 : AppCompatActivity() {
         rv.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         rv.adapter = adapter
 
+        //Intent to send the name and ID of the person to the message activity
+
         adapter.setOnItemClickListener(object:ConversationAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
-                Toast.makeText(this@MainActivity2,"Item number $position Clicked",Toast.LENGTH_SHORT).show()
 
                 val intent=Intent(this@MainActivity2,MainActivity::class.java)
                     intent.putExtra("ID", conversation_list[position].usernum)
@@ -49,8 +55,6 @@ class MainActivity2 : AppCompatActivity() {
         adapter.notifyDataSetChanged()
 
 
-
-
         addButton=findViewById(R.id.addButton)
         addButton.setOnClickListener {
 
@@ -59,6 +63,7 @@ class MainActivity2 : AppCompatActivity() {
 
             val rName = textInput.text.toString().trim() //name of the receiver
 
+            //Save the name of the person in the data base with whom the user wants to start conversation
 
             if(rName.isNotEmpty()){
 
@@ -67,7 +72,7 @@ class MainActivity2 : AppCompatActivity() {
                 conversation_list.add(Conversation(id,"MustafaNosher",rName))
                 textInput.text.clear()
                 rv.scrollToPosition(conversation_list.size - 1)
-                dbHelper.insertConversation(Conversation(id,"MustafaNosher",rName))
+              CDAO.insertConversation(Conversation(id,"MustafaNosher",rName))
             }
             else{
 

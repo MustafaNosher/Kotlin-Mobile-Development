@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#020400"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -20,11 +20,11 @@
 
     <Button
         android:id="@+id/button"
-        style="@android:style/Widget.Material.Light.Button.Toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@android:style/Widget.Material.Button.Toggle"
+        android:layout_width="92dp"
+        android:layout_height="53dp"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginBottom="12dp"
         android:background="#450000"
         android:duplicateParentState="false"
@@ -38,24 +38,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:layout_constraintVertical_bias="0.0"
         app:rippleColor="#9A9A9A" />
 
     <EditText
         android:id="@+id/messagebox"
         style="@style/Widget.AppCompat.AutoCompleteTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="316dp"
+        android:layout_height="51dp"
         android:layout_marginBottom="16dp"
         android:autofillHints=""
+        android:backgroundTint="@android:color/holo_purple"
         android:breakStrategy="high_quality"
         android:ems="10"
         android:hint=" Message"
+        android:textColorHint="#575757"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:singleLine="false"
+        android:singleLine="true"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

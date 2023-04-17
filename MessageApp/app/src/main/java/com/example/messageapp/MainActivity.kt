@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,15 +24,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private var messageList = mutableListOf<ChatContent>()
+//    private var messageList = mutableListOf<ChatContent>()
 
     private lateinit var rv:RecyclerView //recycler view type object
     private lateinit var customadapter:MyAdapter //adapter type object
     private lateinit var textInput: EditText // Edit Text type object
     private lateinit var sendButton: Button // Button Type Object
-    private lateinit var dbHelper:DataBaseHandler
-    private lateinit var name:TextView
-    private lateinit var bot_name:TextView
+    private lateinit var MDAO:  MessageDao //MESSAGE domain layer object
+
+
 
 
 
@@ -40,78 +42,62 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val chatIdentifier=intent.getIntExtra("ID",0)
+        val name=intent.getStringExtra("NAME") // Receives the name of the person with whom to began the conversation
+
+
+
+//        val db=DataBaseHandler(this)
+        MDAO=MessageDbDAO(this)
+        val chat=MDAO.readmessage(chatIdentifier)
+
+        rv=findViewById(R.id.recyclerView)
+        rv.layoutManager=LinearLayoutManager(this)
+        rv.adapter=MyAdapter(chat)
+
 
 
 
         sendButton=findViewById(R.id.button) // id of send button that user will click to send the message
 
-
-        rv=findViewById(R.id.recyclerView)
-        rv.layoutManager=LinearLayoutManager(this)
-
-//        initView()
-
-///        time=findViewById(R.id.textView4)
-
-
-
-        dbHelper= DataBaseHandler(this)
-
-
-       sendButton.setOnClickListener{ sendChat() }
-
-
-    }
-    private fun addConversation(){
-        val inflater = LayoutInflater.from(this)
-        val view = inflater.inflate(R.layout.message_layout, null)
-        name=view.findViewById(R.id.textView)
-        bot_name=view.findViewById(R.id.textView11)
-//        setContentView(view)
-
-        val username=name.text.toString()
-        val robot=bot_name.text.toString()
-        if(username.isEmpty() || robot.isEmpty()){
-            Toast.makeText(this,"Data retrieved seems to be Empty",Toast.LENGTH_SHORT).show()
-        }
-        else{
-            val ctd=Conversation(username,robot)
-            val status=dbHelper.insertConversation(ctd)
-
-            if(status>-1){
-                Toast.makeText(this,"Conversation Added",Toast.LENGTH_SHORT).show()
-            }
-            else{
-                Toast.makeText(this,"Record Not Saved",Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
-
-    private fun sendChat(){
+        sendButton.setOnClickListener{
         textInput=findViewById(R.id.messagebox) //id of view where the user will writes its message
         val messageText = textInput.text.toString().trim()
         val default_message="Hello There How May I assist You!"
         if (messageText.isNotEmpty()){
 
-            customadapter= MyAdapter(messageList)
-            rv.adapter=customadapter
-            rv.addItemDecoration( DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
-            val data=ChatContent(messageText,default_message)
-            messageList+=data // this part save the CONVERSATION in the global List
-            customadapter.notifyDataSetChanged()
-            // Scroll the RecyclerView to the end so that the new message is visible
-            rv.scrollToPosition(messageList.size - 1)
-            // Clear the EditText field so that the user can enter a new message
 
+            val currentTime = System.currentTimeMillis()
+            val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            val time = dateFormat.format(Date(currentTime))
+
+            rv.addItemDecoration( DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+
+            chat.add(Message(chatIdentifier,"MustafaNosher",messageText,time,"SEND"))
+
+            chat.add(Message(chatIdentifier,name!!,default_message,time,"RECEIVE"))
+
+
+
+
+
+            //rv.notifyDataSetChanged()
+            // Scroll the RecyclerView to the end so that the new message is visible
+            rv.scrollToPosition(chat.size - 1)
+
+            // Clear the EditText field so that the user can enter a new message
             textInput.text.clear()
-            addConversation()
+
+            //INSERT THE DATA IN THE DATABASE
+//            db.insertMessage(Message(chatIdentifier,"MustafaNosher",messageText,time,"0"))
+            MDAO.insertMessage(Message(chatIdentifier,"MustafaNosher",messageText,time,"0"))
+            MDAO.insertMessage(Message(chatIdentifier,name,default_message,time,"0"))
 
         }
 
+
     }
-//    private fun initView(){
-//        name=findViewById(R.id.textView)
-//        time=findViewById(R.id.textView4)
-//    }
+
+    }
+
 }
