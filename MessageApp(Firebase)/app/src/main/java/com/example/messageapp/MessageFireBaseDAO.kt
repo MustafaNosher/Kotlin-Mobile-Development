@@ -48,12 +48,12 @@ class MessageFireBaseDAO:MessageDao{
 
 
     }
-    override fun readmessage(id:Int):MutableList<Message>{
+    override fun readmessage(id:String?):MutableList<Message>{
 
         val messageList = mutableListOf<Message>()
         dbRef=FirebaseDatabase.getInstance().getReference("Message")
 
-        val query=dbRef.orderByChild("conversation_id").equalTo(id.toDouble())
+        val query=dbRef.orderByChild("conversation_id").equalTo(id)
 
         query.addListenerForSingleValueEvent(object: ValueEventListener {
 

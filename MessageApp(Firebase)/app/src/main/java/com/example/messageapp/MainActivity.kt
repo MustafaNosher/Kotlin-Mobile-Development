@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val chatIdentifier =intent.getIntExtra("ID",0)
+        val chatIdentifier =intent.getStringExtra("ID")
         val name=intent.getStringExtra("NAME") // Receives the name of the person with whom to began the conversation
+
 
 
 
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         rv=findViewById(R.id.recyclerView)
         rv.layoutManager=LinearLayoutManager(this)
         rv.adapter=MyAdapter(chat)
+
 
 
 

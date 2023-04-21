@@ -22,7 +22,7 @@ class ConversationFireBaseDAO:ConversationDAO {
 
         dbRef= FirebaseDatabase.getInstance().getReference("Conversation")
         val iD=dbRef.push().key!!
-        val conversation=Conversation(std.usernum,std.name,std.reply)
+        val conversation=Conversation(std.usernum,std.name,std.reply,std.senderphone)
         val status= dbRef.child(iD!!).setValue(conversation)
 
 
@@ -50,12 +50,16 @@ class ConversationFireBaseDAO:ConversationDAO {
         }
 
 
-    override fun readConversation(): MutableList<Conversation> {
+    override fun readConversation(senderphone:String?): MutableList<Conversation> {
         val conversationList = mutableListOf<Conversation>()
         dbRef=FirebaseDatabase.getInstance().getReference("Conversation")
 
-        dbRef.addListenerForSingleValueEvent(object: ValueEventListener{
+        val query=dbRef.orderByChild("senderphone").equalTo(senderphone)
+
+        query.addListenerForSingleValueEvent(object: ValueEventListener{
+
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 conversationList.clear() //TESTING PHASE
                 if(snapshot.exists()){
                     for(i in snapshot.children){ //Iterate over all the child nodes
