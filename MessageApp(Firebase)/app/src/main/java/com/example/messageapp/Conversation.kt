@@ -11,5 +11,6 @@ data class Conversation(var usernum:String?=null, var name:String?=null,var repl
 interface ConversationDAO {
     fun insertConversation(std: Conversation)
     fun readConversation(iD:String?): MutableList<Conversation>
+    fun updateConversation(conversation: Conversation)
 }
 

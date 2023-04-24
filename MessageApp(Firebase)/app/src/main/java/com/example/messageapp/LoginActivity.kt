@@ -19,29 +19,32 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        sendername=findViewById(R.id.sendername1)
-        senderphone=findViewById(R.id.editTextPhoneNumber1)
-        login=findViewById(R.id.buttonLogin1)
+        sendername = findViewById(R.id.sendername1)
+        senderphone = findViewById(R.id.editTextPhoneNumber1)
+        login = findViewById(R.id.buttonLogin1)
 
 
 
         login.setOnClickListener {
-            var name=sendername.text.toString().trim()
-            var phone=senderphone.text.toString().trim()
+            var name = sendername.text.toString().trim()
+            var phone = senderphone.text.toString().trim()
 
-        if(name.isNotEmpty() && phone.isNotEmpty()) {
+            if (name.isNotEmpty() && phone.isNotEmpty() && phone.length == 11) {
 
 
                 val intent = Intent(this@LoginActivity, MainActivity2::class.java)
                 intent.putExtra("NAME2", name)
-                intent.putExtra("PHONE",phone)
+                intent.putExtra("PHONE", phone)
                 startActivity(intent)
 
-            }
-        else{
-            Toast.makeText(this, "Field Cannot be Empty!", Toast.LENGTH_SHORT).show()
-        }
-        }
+            } else if (name.isEmpty() || phone.isEmpty()) {
 
+                Toast.makeText(this, "Field Cannot be Empty!", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(this, "Phone Number Should be of 11 Digits!", Toast.LENGTH_SHORT).show()
+            }
+
+        }
     }
 }

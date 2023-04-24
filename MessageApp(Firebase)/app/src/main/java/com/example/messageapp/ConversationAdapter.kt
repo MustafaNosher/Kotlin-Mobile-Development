@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ConversationAdapter(private val conversationList:MutableList<Conversation> ) :RecyclerView.Adapter<ConversationAdapter.ViewHolder2>(){
+class ConversationAdapter(private var sendercell:String?,private val conversationList:MutableList<Conversation> ) :RecyclerView.Adapter<ConversationAdapter.ViewHolder2>(){
 
     private lateinit var rListener: OnItemClickListener
 
@@ -31,7 +31,7 @@ class ConversationAdapter(private val conversationList:MutableList<Conversation>
     override fun onBindViewHolder(holder: ConversationAdapter.ViewHolder2, position: Int) {
 
         val contact = conversationList[position]
-        holder.customBind(contact)
+        holder.customBind(sendercell,contact)
 
     }
 
@@ -46,10 +46,17 @@ class ConversationAdapter(private val conversationList:MutableList<Conversation>
             }
         }
 
-        fun customBind(conobject:Conversation){
+        fun customBind(cell:String?,conobject:Conversation){
 
-            val name: TextView =itemView.findViewById(R.id.contactName)
-            name.text=conobject.reply
+            val name: TextView = itemView.findViewById(R.id.contactName)
+
+            if(conobject.senderphone==cell) {
+
+                name.text = conobject.reply
+            }
+            else{
+                name.text = conobject.name
+            }
 
         }
 

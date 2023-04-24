@@ -19,7 +19,7 @@ class MyAdapter( private var messages: MutableList<Message> = mutableListOf<Mess
 
     override fun getItemViewType(position: Int): Int{
         val messageObj=messages[position]
-        if(messageObj.name=="MustafaNosher"){
+        if(messageObj.status=="SEND"){
             return TOP_MESSAGE
         }
         else{
@@ -50,7 +50,7 @@ class MyAdapter( private var messages: MutableList<Message> = mutableListOf<Mess
 
         val data=messages[position]
 
-        if(data.name=="MustafaNosher"){
+        if(data.status=="SEND"){
 
             holder.bintoTop(data)
 
@@ -86,6 +86,7 @@ class MyAdapter( private var messages: MutableList<Message> = mutableListOf<Mess
         }
         //Bind the view holder related to auto generated reply
         fun bindtoBottom(messageObj:Message){
+
             var message2:TextView=itemView.findViewById(R.id.textView22) // reply message
             var message4:TextView=itemView.findViewById(R.id.textView4) // Reply TIMESTAMP
             var message6:TextView=itemView.findViewById(R.id.textView11) //Name of reply person

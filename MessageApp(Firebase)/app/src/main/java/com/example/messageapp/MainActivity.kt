@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         val chatIdentifier =intent.getStringExtra("ID")
         val name=intent.getStringExtra("NAME") // Receives the name of the person with whom to began the conversation
-
+        val nameofsender=intent.getStringExtra("SENDER")
+        val phoneofsender=intent.getStringExtra("SENDERCELL")
 
 
 
@@ -75,9 +76,18 @@ class MainActivity : AppCompatActivity() {
 
             rv.addItemDecoration( DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
 
-            chat.add(Message(chatIdentifier,"MustafaNosher",messageText,time,"SEND"))
+            //if currentaccount cell==conversationid then user is a reciever person else he is a sender
 
-            chat.add(Message(chatIdentifier,name!!,default_message,time,"RECEIVE"))
+            if(chatIdentifier==phoneofsender){
+                chat.add(Message(chatIdentifier,name!!,messageText,time,"RECEIVE"))
+                MDAO.insertMessage(Message(chatIdentifier,name,messageText,time,"RECEIVE"))
+
+            }
+            else {
+                chat.add(Message(chatIdentifier, nameofsender, messageText, time, "SEND"))
+                MDAO.insertMessage(Message(chatIdentifier,nameofsender,messageText,time,"SEND"))
+            }
+
 
 
 
@@ -92,8 +102,8 @@ class MainActivity : AppCompatActivity() {
 
             //INSERT THE DATA IN THE DATABASE
 //            db.insertMessage(Message(chatIdentifier,"MustafaNosher",messageText,time,"0"))
-            MDAO.insertMessage(Message(chatIdentifier,"MustafaNosher",messageText,time,"0"))
-            MDAO.insertMessage(Message(chatIdentifier,name,default_message,time,"0"))
+
+
 
         }
 

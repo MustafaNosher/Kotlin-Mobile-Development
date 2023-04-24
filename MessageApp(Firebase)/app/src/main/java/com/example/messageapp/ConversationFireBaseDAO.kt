@@ -1,5 +1,6 @@
 package com.example.messageapp
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -12,10 +13,34 @@ class ConversationFireBaseDAO:ConversationDAO {
 
     private var context: Context
     private  lateinit var dbRef: DatabaseReference //get the reference of firebase data base
+    private lateinit  var adapter: ConversationAdapter
+
 
 
     constructor(ctx:Context){
        context=ctx
+    }
+
+    override fun updateConversation(conversation: Conversation) {
+
+            dbRef = FirebaseDatabase.getInstance().getReference("Conversation")
+            dbRef.orderByChild("usernum").equalTo(conversation.usernum).addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()){
+                        for(i in snapshot.children){
+                            val sendernumber = i.child("senderphone").value.toString().trim()
+                            if (sendernumber == conversation.senderphone) {
+                                i.ref.child("reply").setValue(conversation.reply)
+                                adapter.notifyDataSetChanged()
+                            }
+                        }
+                    }
+                }
+
+            override fun onCancelled(error: DatabaseError) {
+                 Toast.makeText(context,"FireBase!! Failed to UPDATE Conversation", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun insertConversation(std: Conversation) {
@@ -36,27 +61,21 @@ class ConversationFireBaseDAO:ConversationDAO {
             Toast.makeText(context,"Record Not Saved in Conversation Table", Toast.LENGTH_SHORT).show()
         }
 
-        //        lateinit var db: SQLiteDatabase
-//
-//
-//        db=dbHelper.writableDatabase
-//
-//        val contentValues = ContentValues()
-//        contentValues.put(DataBaseHandler.ID,std.usernum)
-//        contentValues.put(DataBaseHandler.USER, std.name)
-//        contentValues.put(DataBaseHandler.BOT, std.reply)
-//        val status = db.insert(DataBaseHandler.TABLE_NAME, null, contentValues)
+
 
         }
 
 
+    @SuppressLint("SuspiciousIndentation")
     override fun readConversation(senderphone:String?): MutableList<Conversation> {
         val conversationList = mutableListOf<Conversation>()
+
+
         dbRef=FirebaseDatabase.getInstance().getReference("Conversation")
 
-        val query=dbRef.orderByChild("senderphone").equalTo(senderphone)
+//        val query=dbRef.orderByChild("senderphone").startAt(senderphone).endAt(senderphone + "\uf8ff")
 
-        query.addListenerForSingleValueEvent(object: ValueEventListener{
+           dbRef. addValueEventListener(object: ValueEventListener{
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -64,14 +83,22 @@ class ConversationFireBaseDAO:ConversationDAO {
                 if(snapshot.exists()){
                     for(i in snapshot.children){ //Iterate over all the child nodes
 
-                        val con=i.getValue(Conversation::class.java) //fetches a particular node from the database
+                        val receiverphone = i.child("usernum").value.toString().trim()
+                        val sendernumber = i.child("senderphone").value.toString().trim()
 
-                        conversationList.add(con!!) //add the node to the arraylist !! ensures that the object is not null
+                        if (receiverphone == senderphone||sendernumber==senderphone) {
+                            val con = i.getValue(Conversation::class.java) //fetches a particular node from the database
 
+                            conversationList.add(con!!) //add the node to the arraylist !! ensures that the object is not null
+                        }
                     }
+
                 }
 
+
+
             }
+
 
             override fun onCancelled(error: DatabaseError) {
 
@@ -81,22 +108,6 @@ class ConversationFireBaseDAO:ConversationDAO {
 
         })
 
-//        lateinit var db:SQLiteDatabase
-//
-////        val db = this.readableDatabase
-//        db=dbHelper.readableDatabase
-//
-//        val sql = "Select * from ${DataBaseHandler.TABLE_NAME}"
-//        val fetch = db.rawQuery(sql, null)
-//        while (fetch.moveToNext()) {
-//            val id=fetch.getString(0).toInt()
-//            val sendername=fetch.getString(1)
-//            val recievername=fetch.getString(2)
-
-//            conversationList.add(Conversation(id,sendername,recievername))
-//      }
-//        fetch.close()
-//        db.close()
         if(conversationList.size==0){
             Toast.makeText(context,"Nothing stored in the conversation List", Toast.LENGTH_SHORT).show()
         }
