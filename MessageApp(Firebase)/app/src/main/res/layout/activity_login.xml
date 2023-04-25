@@ -39,6 +39,8 @@
             android:layout_marginBottom="16dp"
             android:background="#FFFFFF"
             android:hint="Username"
+            android:textColor="#000000"
+            android:textColorHint="#454545 "
             android:inputType="text"
             android:minHeight="48dp" />
 
@@ -53,6 +55,8 @@
             android:layout_marginBottom="16dp"
             android:background="#FFFFFF"
             android:hint="Phone number"
+            android:textColorHint="#454545 "
+            android:textColor="#000000"
             android:inputType="phone"
             android:minHeight="48dp" />
 

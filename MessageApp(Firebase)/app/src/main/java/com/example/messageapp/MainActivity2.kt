@@ -46,9 +46,10 @@ class MainActivity2 : AppCompatActivity() {
 
         rv.adapter = adapter
 
-        rv.scrollToPosition(conversation_list.size - 1)
 
+        rv.scrollToPosition(conversation_list.size - 1)
         adapter.notifyDataSetChanged()
+
 
         //Intent to send the name and ID of the person to the message activity
 
@@ -108,14 +109,7 @@ class MainActivity2 : AppCompatActivity() {
                 ) {
 
 
-                    conversation_list.add(
-                        Conversation(
-                            phone_number,
-                            sendername,
-                            rName,
-                            senderphone
-                        )
-                    )
+                    conversation_list.add(Conversation(phone_number, sendername, rName, senderphone))
 
                     textInput.text.clear()
                     textInput2.text.clear()

@@ -1,12 +1,14 @@
 package com.example.messageapp
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ConversationAdapter(private var sendercell:String?,private val conversationList:MutableList<Conversation> ) :RecyclerView.Adapter<ConversationAdapter.ViewHolder2>(){
+class ConversationAdapter(private var sendercell:String?,private var conversationList:MutableList<Conversation> ) :RecyclerView.Adapter<ConversationAdapter.ViewHolder2>(){
+
 
     private lateinit var rListener: OnItemClickListener
 
@@ -18,6 +20,10 @@ class ConversationAdapter(private var sendercell:String?,private val conversatio
         rListener = listener
     }
 
+//    fun setData(conversationList: MutableList<Conversation>) {
+//        this.conversationList = conversationList
+//        notifyDataSetChanged()
+//    }
 
 
 
@@ -38,6 +44,13 @@ class ConversationAdapter(private var sendercell:String?,private val conversatio
     override fun getItemCount(): Int {
         return conversationList.size
     }
+
+//    fun updateConversationList(conversations:MutableList<Conversation>){
+//        this.conversationList.clear()
+//        this.conversationList.addAll(conversations)
+//        notifyDataSetChanged()
+//
+//    }
     class ViewHolder2(private val itemView: View,listener:OnItemClickListener):RecyclerView.ViewHolder(itemView){
 
         init{

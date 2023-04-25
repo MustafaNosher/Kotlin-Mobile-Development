@@ -1,5 +1,7 @@
 package com.example.messageapp
 
+import androidx.recyclerview.widget.RecyclerView
+
 data class Conversation(var usernum:String?=null, var name:String?=null,var reply:String?="",var senderphone:String?=null){
 
 
@@ -11,6 +13,7 @@ data class Conversation(var usernum:String?=null, var name:String?=null,var repl
 interface ConversationDAO {
     fun insertConversation(std: Conversation)
     fun readConversation(iD:String?): MutableList<Conversation>
-    fun updateConversation(conversation: Conversation)
+//   fun OnDataReceive(obj:Conversation): MutableList<Conversation>
+
 }
 

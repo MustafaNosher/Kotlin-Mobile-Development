@@ -1,11 +1,12 @@
 package com.example.messageapp
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+
+
 
 
 class ConversationFireBaseDAO:ConversationDAO {
@@ -19,28 +20,6 @@ class ConversationFireBaseDAO:ConversationDAO {
 
     constructor(ctx:Context){
        context=ctx
-    }
-
-    override fun updateConversation(conversation: Conversation) {
-
-            dbRef = FirebaseDatabase.getInstance().getReference("Conversation")
-            dbRef.orderByChild("usernum").equalTo(conversation.usernum).addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
-                        for(i in snapshot.children){
-                            val sendernumber = i.child("senderphone").value.toString().trim()
-                            if (sendernumber == conversation.senderphone) {
-                                i.ref.child("reply").setValue(conversation.reply)
-                                adapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                }
-
-            override fun onCancelled(error: DatabaseError) {
-                 Toast.makeText(context,"FireBase!! Failed to UPDATE Conversation", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     override fun insertConversation(std: Conversation) {
@@ -91,10 +70,13 @@ class ConversationFireBaseDAO:ConversationDAO {
 
                             conversationList.add(con!!) //add the node to the arraylist !! ensures that the object is not null
                         }
+
                     }
 
-                }
 
+
+                }
+//                adapter.notifyDataSetChanged()
 
 
             }
@@ -109,9 +91,13 @@ class ConversationFireBaseDAO:ConversationDAO {
         })
 
         if(conversationList.size==0){
-            Toast.makeText(context,"Nothing stored in the conversation List", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Nothing store" +
+                    "d in the conversation List", Toast.LENGTH_SHORT).show()
         }
         return conversationList
     }
+
+
+
 
 }
